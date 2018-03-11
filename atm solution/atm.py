@@ -10,35 +10,26 @@ request = 277 # mount requested
 
 
 def money_pull(money, request):
-	if (request <= 0) or (request > money):
-		print "Error, reenter the mount Please!! "
-		return -1
-	while request > 0:
-		
-		while request / 100 != 0:
-			print 'give '+str(100)
-			request -= 100
-			break
-		while request / 50 != 0:
-			print 'give '+str(50)
-			request -= 50
-			break
-		while request / 10 != 0:
-			print 'give '+str(10)
-			request -= 10
-			break
-		while request / 5 != 0:
-			print 'give '+str(5)
-			request -= 5
-			break
-		while request / 2 != 0:
-			print 'give '+str(2)
-			request -= 2
-			break
-		while request / 1 != 0:
-			print 'give '+str(1)
-			request -= 1
-			break
+	if(request>money):
+    		request = money
+	if(request<=0):
+    		print"Please enter right request"
+	while request>0:
+    		if(request>=100 ):
+        		print "give 100"
+        		request=request-100
+    		elif(request>=50):
+            		print "give 50"
+            		request=request-50
+    		elif(request>=10):
+                		print "give 10"
+                		request=request-10
+    		elif(request>=5 ):
+            	        	print "give 5"
+                	    	request=request-5
+    		else:
+                    	 	print "give "+str(request)
+                    	 	request=0
 
 
 money_pull(money, request)
