@@ -19,14 +19,21 @@ class ATM():
         print ("="*30)
         if(request>self.balance):
                 print ("It seems like you have a fotrune sir, I'am affraid i can't afford that!!")
-                print ("="*30)
-                
+                print ("="*30)                
         elif(request<=0):
                 print"Please enter right request"
         else:
             self.withdrawals_list.append(request)
             self.balance -= request
-            while request>0:
+            self.process_request(request)
+        print ("="*30)
+        return self.balance 
+
+
+    @staticmethod
+    def process_request(request):
+        """ Process the operation """
+        while request>0:
                 if(request>=100 ):
                     print "give 100"
                     request=request-100
@@ -42,17 +49,12 @@ class ATM():
                 else:
                     print "give "+str(request)
                     request=0
-        print ("="*30)
-        return self.balance
-
+                   
 
     def show_withdrawals(self):
         """ print the history of withdrawals """
         for withdrawal in self.withdrawals_list:
             print("Your withdrawal list ::"+str(withdrawal))
-
-
-
 
 
 
