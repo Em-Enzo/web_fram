@@ -44,12 +44,21 @@ class MemberStore(object):
 
     def update(self, member):
         # update the list or the DB
-        element = member.id
-        for elem in MemberStore.members:
-               if elem.id == element:
-                    elem.name = member.name
-                    elem.age = member.age
-                    print ("updated ...!")     
+        all_members = self.get_all()
+        for index, element in enumerate(all_members):
+               if element.id == member.id:
+                    all_members[index] = element
+                    print ("updated ...!") 
+
+    def get_by_name(self, name):
+          # search and find the name in the list or the DB
+          all_names = []
+          all_members = self.get_all()
+          for element in all_members:
+              if element.name == name:
+                all_names.append(name)
+                break
+          return all_names 
 
 class PostStore(object):
 	 
