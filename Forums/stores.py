@@ -5,55 +5,65 @@ import copy
 
 
 
-class MemberStore(object):
-	 
-    last_id = 1
-    members =[]
+class BaseStore(object):
+    """docstring for BaseStore"""
+    def __init__(self, data_provider, last_id):
+        self._data_provider = data_provider
+        self._last_id = last_id
     
-    def add(self, element):
-        # append member
-        element.id = MemberStore.last_id
-        MemberStore.members.append(element)
-        MemberStore.last_id += 1
-
     def get_all(self):
-      	# get all members
-      	return MemberStore.members
+        # get all items
+        return self._data_provider
 
-    def get_by_id(self, id):
-        # get member by id 
-        all_members = self.get_all()
+    def add(self, item_instance):
+        # append item
+        item_instance.id = self._last_id
+        self._data_provider.append(item_instance)
+        self._last_id += 1
+
+
+    def get_by_id(self, last_id):
+        # get item by id 
+        all_item_instances = self.get_all()
         result = None 
-        for member in all_members:
-          if member.id == id :
-              result = member
+        for item_instance in all_item_instances:
+          if item_instance.id == self.last_id :
+              result = item_instance
               break  
         return result
 
-    def entity_exists(self, member):
-        # check if member exists or not
+    def entity_exists(self, item_instance):
+        # check if item exists or not
         result = True
-        if get_by_id(member.id) == None:
+        if self.get_by_id(item_instance.id) == None:
           result = False
         return result
 
     def delete(self, id):
-        # delete a member
+        # delete an item
         element = self.get_by_id(id)
         if element != None:
-          MemberStore.members.remove(element)
-          print ("member is deleted !")
+          self._data_provider.remove(element)
+          print ("Item is deleted !")
         else:
-          print ("member not found !")
+          print ("Item not found !")
       
 
-    def update(self, member):
+    def update(self, item_instance):
         # update the list or the DB
-        all_members = self.get_all()
-        for index, element in enumerate(all_members):
-               if element.id == member.id:
-                    all_members[index] = element
+        all_item_instances = self.get_all()
+        for index, element in enumerate(all_item_instances):
+               if element.id == item_instance.id:
+                    all_item_instances[index] = element
                     print ("updated ...!") 
+
+
+class MemberStore(BaseStore):
+    last_id = 1
+    members =[] 
+
+    def __init__(self):
+          super(MemberStore, self).__init__(MemberStore.members, MemberStore.last_id)
 
     def get_by_name(self, name):
           # search and find the name in the list or the DB         
@@ -65,33 +75,30 @@ class MemberStore(object):
 
     def get_members_with_posts(self, all_posts):
       # returns all the members with thiere posts
-      all_members = copy.deepcopy(MemberStore.get_all)
+      all_members =self.get_all()
       for member, post in itertools.product(all_members, all_posts):
         if member.id == post.member_id:
           member.posts.append(post)
-      for member in all_members:
-          yield member
+      return all_members
 
     def get_top_two():
       # returs the top two participation members
       all_members = list(self.get_members_with_posts(all_posts))
-      all_members.sort(key= lambda element: len(element.posts), reveres= True) 
-      yield all_members[0]
-      yield all_members[1]
+      all_members.sort(key= lambda element: len(element.posts), reverse= True) 
+      return all_members[:10]
 
 
 
-class PostStore(object):
-	 
+class PostStore(BaseStore):	 
     posts = []
-    def add(self, element):
-        # add post
-        PostStore.posts.append(element)
+    last_id = 1
 
-    def get_all(self):
-      	# get all posts
-      	return PostStore.posts
+    def __init__(self):
+        super(PostStore, self).__init__(PostStore.posts, PostStore.last_id)
 
-
+    def get_posts_by_date(self, datetime):
+      all_posts = self.get_all()
+      all_posts.sort(key= lambda x: x.date, reverse=True)
+      return all_posts
 
     

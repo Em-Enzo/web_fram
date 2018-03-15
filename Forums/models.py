@@ -21,6 +21,8 @@ class Post(object):
 		self.title = title
 		self.content = content
 		self.member_id = member_id
+		self.date = datetime.datetime.now()
+
 
 	def __str__(self):
 		#return f"Title: {self.title}, Content: {self.content}"
