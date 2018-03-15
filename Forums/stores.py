@@ -1,4 +1,9 @@
 
+import datetime
+import itertools
+import copy
+
+
 
 class MemberStore(object):
 	 
@@ -51,14 +56,30 @@ class MemberStore(object):
                     print ("updated ...!") 
 
     def get_by_name(self, name):
-          # search and find the name in the list or the DB
-          all_names = []
+          # search and find the name in the list or the DB         
           all_members = self.get_all()
-          for element in all_members:
-              if element.name == name:
-                all_names.append(name)
-                break
-          return all_names 
+          #for element in all_members:
+           #   if element.name == name:
+            #      yield element 
+          return (member for member in self.get_all() if member.name == name)
+
+    def get_members_with_posts(self, all_posts):
+      # returns all the members with thiere posts
+      all_members = copy.deepcopy(MemberStore.get_all)
+      for member, post in itertools.product(all_members, all_posts):
+        if member.id == post.member_id:
+          member.posts.append(post)
+      for member in all_members:
+          yield member
+
+    def get_top_two():
+      # returs the top two participation members
+      all_members = list(self.get_members_with_posts(all_posts))
+      all_members.sort(key= lambda element: len(element.posts), reveres= True) 
+      yield all_members[0]
+      yield all_members[1]
+
+
 
 class PostStore(object):
 	 
