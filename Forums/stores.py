@@ -35,7 +35,7 @@ class BaseStore(object):
     def entity_exists(self, item_instance):
         # check if item exists or not
         result = True
-        if self.get_by_id(item_instance.id) == None:
+        if self.get_by_id(item_instance.id) is None:
           result = False
         return result
 
